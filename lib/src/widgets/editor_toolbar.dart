@@ -377,12 +377,14 @@ class ZefyrToolbar extends StatefulWidget {
 
   const ZefyrToolbar({
     Key key,
-    @required this.children,
+    this.children,
+    this.customWidget,
     this.height = kToolbarHeight,
     this.padding = const EdgeInsets.symmetric(horizontal: 8),
   }) : super(key: key);
   final double height;
   final EdgeInsetsGeometry padding;
+  final Widget customWidget;
 
   factory ZefyrToolbar.basic({Key key, @required ZefyrController controller}) {
     return ZefyrToolbar(key: key, children: [
@@ -449,15 +451,23 @@ class ZefyrToolbar extends StatefulWidget {
 class _ZefyrToolbarState extends State<ZefyrToolbar> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: widget.padding,
-      constraints: BoxConstraints.tightFor(height: widget.height),
-      child: SingleChildScrollView(
+    Widget child;
+    if (widget.customWidget != null) {
+      child = widget.customWidget;
+    } else if (widget.children != null) {
+      child = SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
           children: widget.children,
         ),
-      ),
+      );
+    } else {
+      throw Exception();
+    }
+    return Container(
+      padding: widget.padding,
+      constraints: BoxConstraints.tightFor(height: widget.height),
+      child: child,
     );
   }
 }
