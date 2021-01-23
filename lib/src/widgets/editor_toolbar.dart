@@ -195,8 +195,7 @@ class _ToggleStyleButtonState extends State<ToggleStyleButton> {
 
   void _didChangeEditingValue() {
     setState(() {
-      _isToggled =
-          widget.controller.getSelectionStyle().containsSame(widget.attribute);
+      _isToggled = widget.controller.getSelectionStyle().containsSame(widget.attribute);
     });
   }
 
@@ -229,12 +228,9 @@ class _ToggleStyleButtonState extends State<ToggleStyleButton> {
     // toggle style buttons (except the code block button itself) since there
     // is no point in applying styles to a unformatted block of text.
     // TODO: Add code block checks to heading and embed buttons as well.
-    final isInCodeBlock =
-        _selectionStyle.containsSame(NotusAttribute.block.code);
-    final isEnabled =
-        !isInCodeBlock || widget.attribute == NotusAttribute.block.code;
-    return widget.childBuilder(context, widget.attribute, widget.icon,
-        _isToggled, isEnabled ? _toggleAttribute : null);
+    final isInCodeBlock = _selectionStyle.containsSame(NotusAttribute.block.code);
+    final isEnabled = !isInCodeBlock || widget.attribute == NotusAttribute.block.code;
+    return widget.childBuilder(context, widget.attribute, widget.icon, _isToggled, isEnabled ? _toggleAttribute : null);
   }
 
   void _toggleAttribute() {
@@ -280,12 +276,10 @@ Widget defaultToggleStyleButtonBuilder(
 class SelectHeadingStyleButton extends StatefulWidget {
   final ZefyrController controller;
 
-  const SelectHeadingStyleButton({Key key, @required this.controller})
-      : super(key: key);
+  const SelectHeadingStyleButton({Key key, @required this.controller}) : super(key: key);
 
   @override
-  _SelectHeadingStyleButtonState createState() =>
-      _SelectHeadingStyleButtonState();
+  _SelectHeadingStyleButtonState createState() => _SelectHeadingStyleButtonState();
 }
 
 class _SelectHeadingStyleButtonState extends State<SelectHeadingStyleButton> {
@@ -295,8 +289,7 @@ class _SelectHeadingStyleButtonState extends State<SelectHeadingStyleButton> {
 
   void _didChangeEditingValue() {
     setState(() {
-      _value = _selectionStyle.get(NotusAttribute.heading) ??
-          NotusAttribute.heading.unset;
+      _value = _selectionStyle.get(NotusAttribute.heading) ?? NotusAttribute.heading.unset;
     });
   }
 
@@ -307,8 +300,7 @@ class _SelectHeadingStyleButtonState extends State<SelectHeadingStyleButton> {
   @override
   void initState() {
     super.initState();
-    _value = _selectionStyle.get(NotusAttribute.heading) ??
-        NotusAttribute.heading.unset;
+    _value = _selectionStyle.get(NotusAttribute.heading) ?? NotusAttribute.heading.unset;
     widget.controller.addListener(_didChangeEditingValue);
   }
 
@@ -318,8 +310,7 @@ class _SelectHeadingStyleButtonState extends State<SelectHeadingStyleButton> {
     if (oldWidget.controller != widget.controller) {
       oldWidget.controller.removeListener(_didChangeEditingValue);
       widget.controller.addListener(_didChangeEditingValue);
-      _value = _selectionStyle.get(NotusAttribute.heading) ??
-          NotusAttribute.heading.unset;
+      _value = _selectionStyle.get(NotusAttribute.heading) ?? NotusAttribute.heading.unset;
     }
   }
 
@@ -335,8 +326,8 @@ class _SelectHeadingStyleButtonState extends State<SelectHeadingStyleButton> {
   }
 }
 
-Widget _selectHeadingStyleButtonBuilder(BuildContext context,
-    NotusAttribute value, ValueChanged<NotusAttribute> onSelected) {
+Widget _selectHeadingStyleButtonBuilder(
+    BuildContext context, NotusAttribute value, ValueChanged<NotusAttribute> onSelected) {
   final style = TextStyle(fontSize: 12);
 
   final valueToText = {
@@ -381,10 +372,17 @@ Widget _selectHeadingStyleButtonBuilder(BuildContext context,
   );
 }
 
-class ZefyrToolbar extends StatefulWidget implements PreferredSizeWidget {
+class ZefyrToolbar extends StatefulWidget {
   final List<Widget> children;
 
-  const ZefyrToolbar({Key key, @required this.children}) : super(key: key);
+  const ZefyrToolbar({
+    Key key,
+    @required this.children,
+    this.height = kToolbarHeight,
+    this.padding = const EdgeInsets.symmetric(horizontal: 8),
+  }) : super(key: key);
+  final double height;
+  final EdgeInsetsGeometry padding;
 
   factory ZefyrToolbar.basic({Key key, @required ZefyrController controller}) {
     return ZefyrToolbar(key: key, children: [
@@ -446,17 +444,14 @@ class ZefyrToolbar extends StatefulWidget implements PreferredSizeWidget {
 
   @override
   _ZefyrToolbarState createState() => _ZefyrToolbarState();
-
-  @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }
 
 class _ZefyrToolbarState extends State<ZefyrToolbar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8),
-      constraints: BoxConstraints.tightFor(height: widget.preferredSize.height),
+      padding: widget.padding,
+      constraints: BoxConstraints.tightFor(height: widget.height),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
@@ -559,8 +554,7 @@ class _ZDropdownButtonState<T> extends State<ZDropdownButton<T>> {
     final position = RelativeRect.fromRect(
       Rect.fromPoints(
         button.localToGlobal(Offset.zero, ancestor: overlay),
-        button.localToGlobal(button.size.bottomLeft(Offset.zero),
-            ancestor: overlay),
+        button.localToGlobal(button.size.bottomLeft(Offset.zero), ancestor: overlay),
       ),
       Offset.zero & overlay.size,
     );
@@ -591,11 +585,7 @@ class _ZDropdownButtonState<T> extends State<ZDropdownButton<T>> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Row(
-          children: [
-            widget.child,
-            Expanded(child: Container()),
-            Icon(Icons.arrow_drop_down, size: 14)
-          ],
+          children: [widget.child, Expanded(child: Container()), Icon(Icons.arrow_drop_down, size: 14)],
         ),
       ),
     );
